@@ -41,7 +41,7 @@ public class SlothMudPartiesServiceConfig {
     public MessageSender partyMessageSender(WebClient telegramWebClient,
                                             PartyMessageProducer partyMessageProducer,
                                             SlothMudPartiesService filterOldPartiesService,
-                                            @Value("org.slothmud.tmbot.parties.chatId") String chatId) {
+                                            @Value("${org.slothmud.tmbot.parties.chatId}") String chatId) {
         return new PartyMessageSender(telegramWebClient, partyMessageProducer, filterOldPartiesService, chatId);
     }
 
