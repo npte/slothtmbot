@@ -24,6 +24,8 @@ public class SlothMudPartiesInfoReceiver implements SlothMudPartiesService {
     public List<PartyInfo> getParties() {
         String content = receivePartiesInfoPageContent();
 
+        if (content == null) return Collections.emptyList();
+
         List<PartyInfo> partyInfos = extractPartiesInfo(Jsoup.parse(content));
 
         log.debug("Total received {} parties", partyInfos.size());
@@ -73,9 +75,14 @@ public class SlothMudPartiesInfoReceiver implements SlothMudPartiesService {
     }
 
     private String receivePartiesInfoPageContent() {
-        return slothPartiesInfoWebClient.get()
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            return slothPartiesInfoWebClient.get()
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (Exception e) {
+            log.error("Error white receiving sloth party page", e);
+        }
+        return null;
     }
 }

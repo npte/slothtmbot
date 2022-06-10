@@ -1,6 +1,7 @@
 package org.slothmud.tmbot.party.message.sender;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slothmud.tmbot.message.sender.MessageSender;
 import org.slothmud.tmbot.party.message.producer.PartyMessageProducer;
 import org.slothmud.tmbot.party.service.SlothMudPartiesService;
@@ -9,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PartyMessageSender implements MessageSender {
 
@@ -26,11 +28,15 @@ public class PartyMessageSender implements MessageSender {
     }
 
     private void send(String message) {
-        telegramWebClient.get()
-                .uri("/sendMessage?chat_id={chatId}&text={message}", chatId, message)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            telegramWebClient.get()
+                    .uri("/sendMessage?chat_id={chatId}&text={message}", chatId, message)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (Exception e) {
+            log.error("Error while call telegram api", e);
+        }
     }
 
 }
