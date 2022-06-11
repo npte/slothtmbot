@@ -28,7 +28,7 @@ public class SlothMudPartiesInfoReceiver implements SlothMudPartiesService {
 
         List<PartyInfo> partyInfos = extractPartiesInfo(Jsoup.parse(content));
 
-        log.debug("Total received {} parties", partyInfos.size());
+        log.info("Total received {} parties", partyInfos.size());
 
         return partyInfos;
     }
